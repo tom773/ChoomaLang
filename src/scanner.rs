@@ -2,6 +2,7 @@ use logos::Logos;
 
 #[derive(Logos, Debug, PartialEq)]
 #[logos(skip r"[ \t\n\f]+")]
+#[logos(extras = (char, u32))]
 pub enum Token{
         
     // Literals

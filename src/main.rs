@@ -25,14 +25,8 @@ fn run_file(path: &str) {
 fn run(contents: &str) -> Result<(), String>{
      
     let lexer = scanner::Token::lexer(contents);
-    
-    for token in lexer {
-        println!("{:?}", token);
-        match token {
-            Ok(scanner::Token::Chooma) => libchooma::chooma::Scream(),
-            _ => (),
-        }
-    }
+     
+    utils::eval::testutils(lexer);
 
     Ok(())
 }
@@ -64,8 +58,6 @@ fn run_prompt() -> Result<(), String>{
 
 fn main() {
     
-    utils::eval::testutils();
-
     let args: Vec<String> = env::args().collect();
 
     if args.len() > 2 {
