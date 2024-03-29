@@ -2,8 +2,11 @@
 #[allow(unused)]
 #[allow(non_snake_case)]
 
+mod utils;
+mod test;
+mod libchooma;
 mod scanner;
-use crate::scanner::*;
+use logos::Logos;
 
 use std::{
     env,
@@ -20,12 +23,17 @@ fn run_file(path: &str) {
 }
 
 fn run(contents: &str) -> Result<(), String>{
+     
+    let lexer = scanner::Token::lexer(contents);
     
-    let mut scanner = scanner::Scanner::new(contents);
-    let tokens = scanner.scan_tokens();
-    for token in &tokens{
-        println!("Token: {:?}", token);
+    for token in lexer {
+        println!("{:?}", token);
+        match token {
+            Ok(scanner::Token::Chooma) => libchooma::chooma::Scream(),
+            _ => (),
+        }
     }
+
     Ok(())
 }
 
@@ -47,7 +55,6 @@ fn run_prompt() -> Result<(), String>{
             },
             Err(_) => return Err("Failed to read line".to_string()),
         }
-        println!("In: {}", buffer);
         match run(&buffer){
             Ok(_) => (),
             Err(e) => return Err(e),
@@ -56,6 +63,9 @@ fn run_prompt() -> Result<(), String>{
 }
 
 fn main() {
+    
+    utils::eval::testutils();
+
     let args: Vec<String> = env::args().collect();
 
     if args.len() > 2 {
@@ -73,3 +83,5 @@ fn main() {
 
     } 
 }
+
+
