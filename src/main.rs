@@ -7,6 +7,8 @@ mod test;
 mod libchooma;
 mod scanner;
 use logos::Logos;
+use utils::chunk::*;
+
 
 use std::{
     env,
@@ -24,10 +26,8 @@ fn run_file(path: &str) {
 
 fn run(contents: &str) -> Result<(), String>{
      
-    let lexer = scanner::Token::lexer(contents);
-     
-    utils::eval::testutils(lexer);
-
+    let _lexer = scanner::Token::lexer(contents);
+    
     Ok(())
 }
 
@@ -57,7 +57,13 @@ fn run_prompt() -> Result<(), String>{
 }
 
 fn main() {
-    
+   
+    let mut chunk = Chunk::new();
+    chunk.write_op(OpCode::OpReturn);
+    chunk.disassemble();
+    chunk.free();
+
+
     let args: Vec<String> = env::args().collect();
 
     if args.len() > 2 {
